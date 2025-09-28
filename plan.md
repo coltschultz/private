@@ -35,7 +35,7 @@ Given your React/Firebase/Express/Node background, here's a stack that leverages
   - Built-in components for camera, location, notifications
 - **JavaScript first, TypeScript later** - Start familiar, upgrade gradually
 - **React Navigation 6** - Similar patterns to React Router
-- **Material UI (MUI)** - Consistent Material Design components and theming
+- **React Native Elements** - Native mobile UI components with Material Design
 - **React Hook Form** - Same library you'd use in React web
 
 ### Backend & Database - Stick with Firebase
@@ -540,8 +540,7 @@ npm install @react-navigation/native @react-navigation/bottom-tabs @react-naviga
 npx expo install react-native-screens react-native-safe-area-context
 
 # UI Components
-npm install @mui/material @emotion/react @emotion/styled
-npm install @mui/icons-material
+npm install react-native-elements react-native-vector-icons
 npx expo install react-native-svg
 
 # Forms
