@@ -237,19 +237,161 @@ Cancelled (with refund policy)
 - **Dispute resolution** system with admin intervention
 - **Automatic refunds** for cancelled orders
 
-## 🔔 Notification & Scheduling System
+## 🔔 Push Notification & Scheduling System
 
-### Real-time Notifications
-- **Order status updates** (accepted, ready, etc.)
-- **New menu items** from followed cooks
-- **Reminder notifications** for scheduled pickups
-- **Review requests** after order completion
+### Push Notification Setup
+**Required Packages** (install with npm/expo):
+- `expo-notifications` - Core notification handling
+- `expo-device` - Device detection
+- `expo-constants` - App configuration
+- `firebase/messaging` - Firebase Cloud Messaging (FCM)
+
+**Configuration Needed**:
+- Firebase Cloud Messaging (FCM) in Firebase Console
+- VAPID key for web push notifications
+- Push notification permissions (iOS/Android)
+- Notification icons and sound files
+
+### Real-time Push Notifications
+
+#### Order Lifecycle Notifications:
+- **Order Placed** → "New order received from [Buyer Name]" (to Cook)
+- **Order Accepted** → "Maria Santos accepted your Chicken Mole order!" (to Buyer)
+- **Order Declined** → "Your order was declined. Browse other options." (to Buyer)
+- **Preparing** → "Your order is being prepared 👨‍🍳" (to Buyer)
+- **Ready for Pickup** → "Food ready! Pickup at Maria's Kitchen" (to Buyer)
+- **Completed** → "Order delivered! Please leave a review ⭐" (to Buyer)
+
+#### Discovery & Engagement:
+- **New Menu Items** → "Bangkok Betty added Pad Thai to the menu!" (to Followers)
+- **Cook Available** → "Your favorite cook just opened slots for tomorrow" (to Followers)
+- **Price Drops** → "Nonna Isabella reduced lasagna prices by 20%" (to Interested Users)
+- **Last Chance** → "Only 2 slots left for tomorrow's orders" (to Users)
+
+#### Reminders & Scheduling:
+- **Pickup Reminders** → "Pickup in 30 minutes at [Address]" (to Buyer)
+- **Prep Reminders** → "Don't forget to prep for tomorrow's 5 orders" (to Cook)
+- **Review Requests** → "How was your meal? Rate Maria Santos" (to Buyer, 2 hours after pickup)
+- **Reorder Suggestions** → "Craving Chicken Mole again? Reorder from Maria" (to Previous Buyers)
+
+### Notification Categories & Targeting
+
+#### By User Type:
+**Cooks Receive**:
+- New order alerts (immediate)
+- Prep reminders (evening before)
+- Capacity warnings (when approaching daily limit)
+- Review notifications (when rated)
+- Weekly earnings summary
+
+**Buyers Receive**:
+- Order status updates (real-time)
+- Pickup reminders (30 min before)
+- New menu notifications (from followed cooks)
+- Special offers & discounts
+- Recommendation notifications
+
+#### By Urgency:
+- **Critical** (Sound + Vibration): Order status changes, pickup reminders
+- **Important** (Sound only): New orders, prep reminders
+- **Info** (Silent): New menu items, weekly summaries
+
+### Advanced Notification Features
+
+#### Smart Scheduling:
+- **Time-zone aware** delivery based on user location
+- **Quiet hours** respect (no notifications 10PM-7AM)
+- **Frequency capping** (max 3 promotional notifications per day)
+- **User preferences** (can disable categories individually)
+
+#### Personalization:
+- **Location-based** → Only show nearby cook notifications
+- **Dietary preferences** → Filter notifications by dietary tags
+- **Order history** → Prioritize notifications from previously ordered cooks
+- **Engagement patterns** → Send notifications when user is most active
+
+#### Rich Notifications:
+- **Images** → Show food photos in notification
+- **Action buttons** → "Accept Order", "View Menu", "Rate Now"
+- **Deep linking** → Direct navigation to specific screens
+- **Custom sounds** → Different sounds for different notification types
+
+### Technical Implementation
+
+#### Notification Service Architecture:
+```javascript
+// Notification trigger types
+- Local notifications (scheduled, immediate)
+- Remote notifications (FCM from backend)
+- Background notifications (when app is closed)
+- Foreground notifications (when app is active)
+```
+
+#### Backend Integration:
+**Cloud Functions** (Firebase) for automated notifications:
+- Order status change triggers
+- Scheduled reminder functions
+- Batch notification sending
+- Analytics and tracking
+
+**Push Token Management**:
+- Store user push tokens in Firestore
+- Update tokens on app login/logout
+- Handle token refresh automatically
+- Remove tokens when user uninstalls
+
+### Notification Analytics & Optimization
+
+#### Tracking Metrics:
+- **Delivery rates** → How many notifications reach users
+- **Open rates** → How many users tap notifications
+- **Conversion rates** → Notifications leading to orders
+- **Unsubscribe rates** → Users disabling notifications
+
+#### A/B Testing:
+- **Message content** → Test different notification copy
+- **Send timing** → Optimize delivery times
+- **Frequency** → Find optimal notification cadence
+- **Personalization** → Test targeted vs. general notifications
+
+### Notification Permission Strategy
+
+#### Progressive Permission Requests:
+1. **Onboarding** → Explain notification benefits
+2. **First Order** → "Get updates on your order status?"
+3. **Cook Setup** → "Receive new order notifications?"
+4. **Feature Discovery** → "Get notified about new menu items?"
+
+#### Fallback Options:
+- **In-app notifications** for users who decline push
+- **Email notifications** as secondary channel
+- **SMS notifications** for critical updates (optional)
 
 ### Scheduling Features
 - **Calendar integration** for cooks to manage availability
 - **Batch cooking** support for multiple orders
 - **Lead time management** per cook and menu item
 - **Capacity management** to prevent overselling
+- **Smart scheduling** algorithms for optimal delivery times
+
+### Notification Best Practices
+
+#### Content Guidelines:
+- **Personalized** → Use buyer/cook names
+- **Actionable** → Clear next steps
+- **Timely** → Sent at relevant moments
+- **Valuable** → Provide useful information
+- **Concise** → Under 50 characters for titles
+
+#### Frequency Management:
+- **Immediate**: Order status updates
+- **Daily**: Max 3 promotional notifications
+- **Weekly**: Summary and recommendation notifications
+- **Monthly**: App feature updates and tips
+
+---
+
+**Implementation Priority**: Start with basic order status notifications, then add discovery and reminder notifications as the app grows.
 
 ## 📱 App Architecture
 
